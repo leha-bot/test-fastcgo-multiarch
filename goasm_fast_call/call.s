@@ -14,15 +14,23 @@
 // for details of all ARM regs,
 // For asm details see https://9p.io/sys/doc/asm.html
 #define RARG0 R0
-#define RARG0 R1
-#define RARG0 R2
-#define RARG0 R3
+#define RARG1 R1
+#define RARG2 R2
+#define RARG3 R3
 #else
 #define RARG0 DI
 #define RARG1 SI
 #define RARG2 DX
 #define RARG3 CX
 #endif
+#endif
+
+#ifdef GOARCH_arm64
+#define PREPARE_CALL                                                            \
+	ADRP X1, fn+0(FP)
+#else
+#define PREPARE_CALL                                                            \
+        MOV fn+0(FP), AX
 #endif
 
 #define UNSAFE_CALL                                                                 \
@@ -40,13 +48,15 @@
 // func UnsafeCall0(fn unsafe.Pointer)
 // Switches SP to g0 stack and calls fn.
 TEXT ·UnsafeCall0(SB), NOSPLIT, $0-0
-	MOVQ fn+0(FP), AX
+//	MOVQ fn+0(FP), AX
+	PREPARE_CALL
 	UNSAFE_CALL
 
 // func UnsafeCall4(fn unsafe.Pointer, arg0, arg1, arg2, arg3 uint64)
 // Switches SP to g0 stack and calls fn.
 TEXT ·UnsafeCall4(SB), NOSPLIT, $0-0
-	MOVQ fn+0(FP), AX
+//	MOVQ fn+0(FP), AX
+	PREPARE_CALL
 	MOVQ arg0+8(FP), RARG0
 	MOVQ arg1+16(FP), RARG1
 	MOVQ arg2+24(FP), RARG2
