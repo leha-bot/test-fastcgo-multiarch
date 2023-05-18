@@ -1,4 +1,4 @@
-// +build amd64 amd64p32
+// +build amd64 amd64p32 arm64
 
 #include "go_asm.h"
 #include "textflag.h"
@@ -9,10 +9,20 @@
 #define RARG2 R8
 #define RARG3 R9
 #else
+#ifdef GOARCH_arm64
+// see https://developer.arm.com/documentation/den0024/a/The-ABI-for-ARM-64-bit-Architecture/Register-use-in-the-AArch64-Procedure-Call-Standard/Parameters-in-general-purpose-registers
+// for details of all ARM regs,
+// For asm details see https://9p.io/sys/doc/asm.html
+#define RARG0 R0
+#define RARG0 R1
+#define RARG0 R2
+#define RARG0 R3
+#else
 #define RARG0 DI
 #define RARG1 SI
 #define RARG2 DX
 #define RARG3 CX
+#endif
 #endif
 
 #define UNSAFE_CALL                                                                 \
