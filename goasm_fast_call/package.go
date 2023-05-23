@@ -1,4 +1,4 @@
-package goasm_fast_call;
+package goasm_fast_call
 
 import "unsafe"
 
@@ -8,5 +8,11 @@ import "unsafe"
 // must be taken. Do not use unless you know what you are doing.
 func UnsafeCall0(fn unsafe.Pointer)
 
-// UnsafeCall4 allows calling a C function taking 4 uintptr arguments from Go.
+// UnsafeCall1 allows calling a C function taking 1 uintptr argument from Go.
+func UnsafeCall1(fn unsafe.Pointer, arg0 uintptr)
+
+// UnsafeCall1 allows calling a C function taking 1 uintptr argument from Go.
+func UnsafeCall1WithRet(fn unsafe.Pointer, arg0 uintptr) uintptr
+
+// UnsafeCall4 allows calling a C function taking 4 uint64 arguments from Go.
 func UnsafeCall4(fn unsafe.Pointer, arg0, arg1, arg2, arg3 uintptr)
