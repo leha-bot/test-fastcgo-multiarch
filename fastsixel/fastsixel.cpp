@@ -3,6 +3,18 @@
 
 #include <string>
 
+#include "fastsixel.h"
+
+static print_to cur_print_mode = to_stdout;
+
+extern "C" print_to cur_print_message_mode() {
+	return cur_print_mode;
+}
+
+extern "C" void set_print_message_mode(print_to mode) {
+	cur_print_mode = mode;
+}
+
 extern "C" void print_message(const char *message) {
 	printf("C FFI message: %s\n", message);
 }
